@@ -1,0 +1,31 @@
+# SM-102 mRNA Lipid Nanoparticle — SBOL3 Example
+
+A structured SBOL3 representation of a four-component ionisable lipid 
+nanoparticle for mRNA delivery, based on publicly available FDA filings 
+and supporting technical literature for the Moderna mRNA-1273 formulation.
+
+## Files
+
+- `design.ttl` — SBOL3 Turtle representation of the formulation
+
+## Formulation
+
+| Component | Role | Molar fraction |
+|---|---|---|
+| SM-102 | Ionisable lipid | 0.50 |
+| DSPC | Helper lipid | 0.10 |
+| Cholesterol | Membrane modulator | 0.385 |
+| DMG-PEG2000 | Surface stabilisation | 0.015 |
+| mRNA payload | Active cargo | — |
+
+Molar ratio sum (lipid phase): 0.50 + 0.10 + 0.385 + 0.015 = 1.000
+
+## Modelling notes
+
+Conventions used in `design.ttl` are documented in 
+[docs/data-model.md](../../docs/data-model.md).
+
+## Source
+
+Based on publicly available FDA filings and supporting technical literature 
+for the Moderna mRNA-1273 COVID-19 vaccine.
