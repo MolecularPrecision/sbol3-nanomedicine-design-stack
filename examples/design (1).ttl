@@ -1,0 +1,244 @@
+# =============================================================================
+# sbol3-nanomedicine-design-stack
+# SM-102 mRNA Lipid Nanoparticle Formulation — SBOL3 Representation
+#
+# Source: Based on publicly available FDA filings and supporting technical
+# literature for the Moderna mRNA-1273 COVID-19 vaccine formulation.
+#
+# Molar ratios: SM-102 : DSPC : Cholesterol : DMG-PEG2000 = 50 : 10 : 38.5 : 1.5
+#
+# Modelling conventions follow docs/data-model.md
+# Namespace: https://molecularprecision.github.io/sbol3-nanomedicine-design-stack/ns#
+#
+# MolecularPrecision · https://github.com/MolecularPrecision
+# =============================================================================
+
+@prefix sbol:   <https://sbolstandard.org/datamodel/sbol3#> .
+@prefix ns:     <https://molecularprecision.github.io/sbol3-nanomedicine-design-stack/ns#> .
+@prefix om:     <http://www.ontology-of-units-of-measure.org/resource/om-2/> .
+@prefix owl:    <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+@prefix chebi:  <http://purl.obolibrary.org/obo/CHEBI_> .
+@prefix so:     <http://identifiers.org/SO:> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+# =============================================================================
+# NAMESPACE DECLARATIONS
+# Custom terms proposed in this repository for formulation-level representation
+# Full definitions: docs/data-model.md § 3
+# =============================================================================
+
+ns:ionisableLipid
+    a owl:Class ;
+    rdfs:label "ionisable lipid" ;
+    rdfs:comment "Functional delivery component. Ionises under acidic endosomal conditions to mediate membrane disruption and cytoplasmic release of cargo." ;
+    owl:closeMatch chebi:60004 .
+
+ns:helperLipid
+    a owl:Class ;
+    rdfs:label "helper lipid" ;
+    rdfs:comment "Structural stabilisation component. Supports bilayer integrity and particle architecture." ;
+    owl:closeMatch chebi:16110 .
+
+ns:membraneModulator
+    a owl:Class ;
+    rdfs:label "membrane modulator" ;
+    rdfs:comment "Modulates membrane fluidity and mechanical stability of the lipid nanoparticle." ;
+    owl:closeMatch chebi:16113 .
+
+ns:surfaceStabilisationComponent
+    a owl:Class ;
+    rdfs:label "surface stabilisation component" ;
+    rdfs:comment "PEGylated lipid providing steric stabilisation. Controls circulation half-life and reduces non-specific protein adsorption." ;
+    owl:closeMatch chebi:53426 .
+
+ns:mRNAPayload
+    a owl:Class ;
+    rdfs:label "mRNA payload" ;
+    rdfs:comment "Active therapeutic cargo. Messenger RNA encapsulated within the lipid nanoparticle for intracellular delivery." .
+
+ns:encapsulates
+    a owl:ObjectProperty ;
+    rdfs:label "encapsulates" ;
+    rdfs:comment "Directional asymmetric relationship. The subject component physically contains and protects the object component for delivery." .
+
+ns:molarRatio
+    a owl:DatatypeProperty ;
+    rdfs:label "molar ratio" ;
+    rdfs:comment "Molar fraction of this component within the lipid phase of the formulation. Convention: lipid phase only; mRNA payload excluded from denominator." .
+
+ns:formulationBasis
+    a owl:DatatypeProperty ;
+    rdfs:label "formulation basis" ;
+    rdfs:comment "The phase or sub-system to which the molar ratio applies. Value: lipidPhase." .
+
+ns:componentSource
+    a owl:DatatypeProperty ;
+    rdfs:label "component source" ;
+    rdfs:comment "Reference to primary or supporting literature from which component identity and ratio are drawn." .
+
+# =============================================================================
+# TOP-LEVEL FORMULATION OBJECT
+# The LNP assembly as a structured SBOL3 Component
+# =============================================================================
+
+<https://github.com/MolecularPrecision/sbol3-nanomedicine-design-stack/examples/sm102-mrna-lnp/LNP_Assembly>
+    a sbol:Component ;
+    dcterms:title "SM-102 mRNA Lipid Nanoparticle" ;
+    dcterms:description "Four-component ionisable lipid nanoparticle for mRNA delivery. Based on publicly available FDA filings and supporting technical literature for the Moderna mRNA-1273 formulation. Molar ratios: SM-102 50 : DSPC 10 : Cholesterol 38.5 : DMG-PEG2000 1.5." ;
+    sbol:displayId "LNP_Assembly" ;
+    sbol:hasNamespace "https://github.com/MolecularPrecision/sbol3-nanomedicine-design-stack/examples/sm102-mrna-lnp/" ;
+    sbol:type <http://purl.obolibrary.org/obo/NCIT_C142659> ;
+    sbol:role ns:ionisableLipid ;
+    dcterms:created "2026-04-10"^^xsd:date ;
+    dcterms:creator "MolecularPrecision" ;
+    dcterms:source <https://www.fda.gov/emergency-preparedness-and-response/coronavirus-disease-2019-covid-19/moderna-covid-19-vaccine> ;
+    sbol:hasFeature
+        <https://github.com/MolecularPrecision/sbol3-nanomedicine-design-stack/examples/sm102-mrna-lnp/Feature_SM102> ,
+        <https://github.com/MolecularPrecision/sbol3-nanomedicine-design-stack/examples/sm102-mrna-lnp/Feature_DSPC> ,
+        <https://github.com/MolecularPrecision/sbol3-nanomedicine-design-stack/examples/sm102-mrna-lnp/Feature_Cholesterol> ,
+        <https://github.com/MolecularPrecision/sbol3-nanomedicine-design-stack/examples/sm102-mrna-lnp/Feature_DMGPEG2000> ,
+        <https://github.com/MolecularPrecision/sbol3-nanomedicine-design-stack/examples/sm102-mrna-lnp/Feature_mRNA> ;
+    sbol:hasConstraint
+        <https://github.com/MolecularPrecision/sbol3-nanomedicine-design-stack/examples/sm102-mrna-lnp/Constraint_Encapsulation> .
+
+# =============================================================================
+# COMPONENT DEFINITIONS
+# Each constituent as a distinct SBOL3 Component
+# =============================================================================
+
+<https://github.com/MolecularPrecision/sbol3-nanomedicine-design-stack/examples/sm102-mrna-lnp/SM102>
+    a sbol:Component ;
+    dcterms:title "SM-102" ;
+    dcterms:description "Ionisable lipid. Heptadecan-9-yl 8-((2-hydroxyethyl)(6-oxo-6-(undecyloxy)hexyl)amino)octanoate. Primary functional delivery component mediating endosomal escape." ;
+    sbol:displayId "SM102" ;
+    sbol:hasNamespace "https://github.com/MolecularPrecision/sbol3-nanomedicine-design-stack/examples/sm102-mrna-lnp/" ;
+    sbol:type <http://purl.obolibrary.org/obo/CHEBI_60004> ;
+    sbol:role ns:ionisableLipid ;
+    owl:closeMatch <http://purl.obolibrary.org/obo/CHEBI_144823> ;
+    ns:componentSource "FDA EUA submission mRNA-1273; Moderna technical disclosures" .
+
+<https://github.com/MolecularPrecision/sbol3-nanomedicine-design-stack/examples/sm102-mrna-lnp/DSPC>
+    a sbol:Component ;
+    dcterms:title "DSPC" ;
+    dcterms:description "1,2-distearoyl-sn-glycero-3-phosphocholine. Helper lipid providing structural bilayer stabilisation." ;
+    sbol:displayId "DSPC" ;
+    sbol:hasNamespace "https://github.com/MolecularPrecision/sbol3-nanomedicine-design-stack/examples/sm102-mrna-lnp/" ;
+    sbol:type <http://purl.obolibrary.org/obo/CHEBI_16110> ;
+    sbol:role ns:helperLipid ;
+    owl:closeMatch <http://purl.obolibrary.org/obo/CHEBI_57981> ;
+    ns:componentSource "FDA EUA submission mRNA-1273; Moderna technical disclosures" .
+
+<https://github.com/MolecularPrecision/sbol3-nanomedicine-design-stack/examples/sm102-mrna-lnp/Cholesterol>
+    a sbol:Component ;
+    dcterms:title "Cholesterol" ;
+    dcterms:description "Cholesterol. Membrane modulator regulating bilayer fluidity and mechanical integrity of the lipid nanoparticle." ;
+    sbol:displayId "Cholesterol" ;
+    sbol:hasNamespace "https://github.com/MolecularPrecision/sbol3-nanomedicine-design-stack/examples/sm102-mrna-lnp/" ;
+    sbol:type <http://purl.obolibrary.org/obo/CHEBI_16113> ;
+    sbol:role ns:membraneModulator ;
+    owl:closeMatch <http://purl.obolibrary.org/obo/CHEBI_16113> ;
+    ns:componentSource "FDA EUA submission mRNA-1273; Moderna technical disclosures" .
+
+<https://github.com/MolecularPrecision/sbol3-nanomedicine-design-stack/examples/sm102-mrna-lnp/DMGPEG2000>
+    a sbol:Component ;
+    dcterms:title "DMG-PEG2000" ;
+    dcterms:description "1,2-Dimyristoyl-rac-glycero-3-methoxypolyethylene glycol-2000. PEGylated lipid providing steric surface stabilisation and modulation of circulation half-life." ;
+    sbol:displayId "DMGPEG2000" ;
+    sbol:hasNamespace "https://github.com/MolecularPrecision/sbol3-nanomedicine-design-stack/examples/sm102-mrna-lnp/" ;
+    sbol:type <http://purl.obolibrary.org/obo/CHEBI_53426> ;
+    sbol:role ns:surfaceStabilisationComponent ;
+    owl:closeMatch <http://purl.obolibrary.org/obo/CHEBI_53426> ;
+    ns:componentSource "FDA EUA submission mRNA-1273; Moderna technical disclosures" .
+
+<https://github.com/MolecularPrecision/sbol3-nanomedicine-design-stack/examples/sm102-mrna-lnp/mRNA_Payload>
+    a sbol:Component ;
+    dcterms:title "mRNA payload" ;
+    dcterms:description "Messenger RNA therapeutic cargo. Encapsulated within the LNP assembly for intracellular delivery. Sequence not encoded in this formulation-layer representation." ;
+    sbol:displayId "mRNA_Payload" ;
+    sbol:hasNamespace "https://github.com/MolecularPrecision/sbol3-nanomedicine-design-stack/examples/sm102-mrna-lnp/" ;
+    sbol:type <http://identifiers.org/SO:0000233> ;
+    sbol:role ns:mRNAPayload .
+
+# =============================================================================
+# FEATURES
+# Component instances within the LNP assembly, with molar ratio annotations
+# Convention: molar ratio as typed om:Measure on each lipid Feature
+# See docs/data-model.md § 3, Convention 1
+# =============================================================================
+
+<https://github.com/MolecularPrecision/sbol3-nanomedicine-design-stack/examples/sm102-mrna-lnp/Feature_SM102>
+    a sbol:SubComponent ;
+    sbol:instanceOf <https://github.com/MolecularPrecision/sbol3-nanomedicine-design-stack/examples/sm102-mrna-lnp/SM102> ;
+    sbol:displayId "Feature_SM102" ;
+    ns:molarRatio [
+        a om:Measure ;
+        om:hasNumericalValue "0.50"^^xsd:decimal ;
+        om:hasUnit om:one ;
+        ns:formulationBasis "lipidPhase" ;
+        rdfs:comment "50 mol% of total lipid phase. Primary ionisable lipid. Canonical value from mRNA-1273 formulation."
+    ] .
+
+<https://github.com/MolecularPrecision/sbol3-nanomedicine-design-stack/examples/sm102-mrna-lnp/Feature_DSPC>
+    a sbol:SubComponent ;
+    sbol:instanceOf <https://github.com/MolecularPrecision/sbol3-nanomedicine-design-stack/examples/sm102-mrna-lnp/DSPC> ;
+    sbol:displayId "Feature_DSPC" ;
+    ns:molarRatio [
+        a om:Measure ;
+        om:hasNumericalValue "0.10"^^xsd:decimal ;
+        om:hasUnit om:one ;
+        ns:formulationBasis "lipidPhase" ;
+        rdfs:comment "10 mol% of total lipid phase. Helper lipid. Canonical value from mRNA-1273 formulation."
+    ] .
+
+<https://github.com/MolecularPrecision/sbol3-nanomedicine-design-stack/examples/sm102-mrna-lnp/Feature_Cholesterol>
+    a sbol:SubComponent ;
+    sbol:instanceOf <https://github.com/MolecularPrecision/sbol3-nanomedicine-design-stack/examples/sm102-mrna-lnp/Cholesterol> ;
+    sbol:displayId "Feature_Cholesterol" ;
+    ns:molarRatio [
+        a om:Measure ;
+        om:hasNumericalValue "0.385"^^xsd:decimal ;
+        om:hasUnit om:one ;
+        ns:formulationBasis "lipidPhase" ;
+        rdfs:comment "38.5 mol% of total lipid phase. Membrane modulator. Canonical value from mRNA-1273 formulation."
+    ] .
+
+<https://github.com/MolecularPrecision/sbol3-nanomedicine-design-stack/examples/sm102-mrna-lnp/Feature_DMGPEG2000>
+    a sbol:SubComponent ;
+    sbol:instanceOf <https://github.com/MolecularPrecision/sbol3-nanomedicine-design-stack/examples/sm102-mrna-lnp/DMGPEG2000> ;
+    sbol:displayId "Feature_DMGPEG2000" ;
+    ns:molarRatio [
+        a om:Measure ;
+        om:hasNumericalValue "0.015"^^xsd:decimal ;
+        om:hasUnit om:one ;
+        ns:formulationBasis "lipidPhase" ;
+        rdfs:comment "1.5 mol% of total lipid phase. Surface stabilisation component. Canonical value from mRNA-1273 formulation."
+    ] .
+
+<https://github.com/MolecularPrecision/sbol3-nanomedicine-design-stack/examples/sm102-mrna-lnp/Feature_mRNA>
+    a sbol:SubComponent ;
+    sbol:instanceOf <https://github.com/MolecularPrecision/sbol3-nanomedicine-design-stack/examples/sm102-mrna-lnp/mRNA_Payload> ;
+    sbol:displayId "Feature_mRNA" ;
+    rdfs:comment "mRNA payload. Excluded from lipid phase molar ratio denominator. Ratio to lipid expressed separately as N:P ratio in process documentation." .
+
+# =============================================================================
+# CONSTRAINT
+# Encapsulation relationship between LNP assembly and mRNA payload
+# Convention: directed Constraint with locally declared restriction term
+# See docs/data-model.md § 3, Convention 3
+# =============================================================================
+
+<https://github.com/MolecularPrecision/sbol3-nanomedicine-design-stack/examples/sm102-mrna-lnp/Constraint_Encapsulation>
+    a sbol:Constraint ;
+    sbol:restriction ns:encapsulates ;
+    sbol:subject <https://github.com/MolecularPrecision/sbol3-nanomedicine-design-stack/examples/sm102-mrna-lnp/Feature_SM102> ;
+    sbol:object <https://github.com/MolecularPrecision/sbol3-nanomedicine-design-stack/examples/sm102-mrna-lnp/Feature_mRNA> ;
+    rdfs:comment "The LNP lipid assembly encapsulates the mRNA payload. Directional, asymmetric relationship. Locally declared restriction term — see docs/data-model.md § 3, Convention 3." .
+
+# =============================================================================
+# END OF FILE
+# Molar ratio sum check: 0.50 + 0.10 + 0.385 + 0.015 = 1.000
+# All four lipid phase components accounted for.
+# =============================================================================
